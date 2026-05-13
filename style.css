@@ -49,10 +49,10 @@ body {
   font-size: 4rem;
   color: #ff3333;
   text-shadow: 
-    0 0 10px #ff0000,
-    0 0 20px #ff0000,
-    0 0 30px #ff0000,
-    0 0 40px #990000;
+    0 0 10px #1c6e29,
+    0 0 20px #1c6e29,
+    0 0 30px #1c6e29,
+    0 0 40px #0d590d;
   letter-spacing: 8px;
   margin-bottom: 50px;
   animation: flicker 2s ease-in-out infinite;
@@ -83,15 +83,15 @@ body {
   left: 50% !important;
   transform: translateX(-50%) !important;
   padding: 18px 40px !important;
-  background: linear-gradient(135deg, #aa0000 0%, #ff3333 100%) !important;
-  border: 3px solid #ff6666 !important;
+  background: linear-gradient(135deg, #0f5312 0%, #0f5312 100%) !important;
+  border: 3px solid #0f5312 !important;
   color: white !important;
   font-size: 1.3rem !important;
   font-weight: bold !important;
   cursor: pointer !important;
   border-radius: 12px !important;
   box-shadow: 
-    0 0 20px rgba(255, 0, 0, 0.8),
+    0 0 20px rgba(27, 87, 39, 0.8),
     0 5px 15px rgba(0, 0, 0, 0.5) !important;
   transition: all 0.3s ease !important;
   text-transform: uppercase !important;
@@ -100,10 +100,10 @@ body {
 }
 
 .vr-button:hover {
-  background: linear-gradient(135deg, #cc0000 0%, #ff5555 100%) !important;
+  background: linear-gradient(135deg, #0f5312 0%, #1d8d37 100%) !important;
   box-shadow: 
-    0 0 30px rgba(255, 0, 0, 1),
-    0 7px 20px rgba(0, 0, 0, 0.6) !important;
+    0 0 30px rgb(18, 97, 19),
+    0 7px 20px rgba(2, 255, 23, 0.6) !important;
   transform: translateX(-50%) translateY(-3px) !important;
 }
 
@@ -115,7 +115,7 @@ body {
   z-index: 100;
   background: rgba(0, 0, 0, 0.7);
   padding: 15px 25px;
-  border: 2px solid #ff3333;
+  border: 2px solid #33ff5c;
   border-radius: 8px;
   box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
 }
