@@ -1,26 +1,39 @@
 <!DOCTYPE html>
+
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cementerio Fantasma VR</title>
+
+  <!-- Estilos -->
+
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <!-- Pantalla de inicio -->
+
+  <!-- 🔥 PANTALLA DE INICIO -->
+
   <div id="startScreen">
     <div class="title-container">
       <h1 class="game-title">ENTES DE ULTRA TUMBA</h1>
-      <div class="instructions">
-        <p>INTENTA NO IRTE POSEEIDO POR ALGUN ENTE DE LAS CATACUMBAS</p>
-        <p>LOS ENTES APARECERÁN DE TODAS PARTES ATENTO</p>
-        <p>MIRA DE FRENTE AL PELIGRO Y PURIFICALOS CON TU LUZ SAGRADA</p>
-        <p>SI TE POSEEN GAME OVER</p>
-      </div>
-    </div>
+
+```
+  <div class="instructions">
+    <p>INTENTA NO IRTE POSEÍDO POR ALGÚN ENTE DE LAS CATACUMBAS</p>
+    <p>LOS ENTES APARECERÁN DE TODAS PARTES, ATENTO</p>
+    <p>PURIFÍCALOS CON TU LUZ SAGRADA</p>
+    <p>AHORA TAMBIÉN HAY ALGO MÁS RÁPIDO... 👁️</p>
+    <p>SI TE ATRAPAN... NO SOLO ES GAME OVER 😱</p>
+  </div>
+</div>
+```
+
   </div>
 
-  <!-- HUD en juego -->
+  <!-- 🎮 HUD DEL JUEGO -->
+
   <div id="gameHUD" style="display: none;">
     <div class="hud-info">
       <p>Fantasmas eliminados: <span id="killCount">0</span></p>
@@ -28,32 +41,51 @@
     </div>
   </div>
 
-  <!-- Pantalla de Game Over -->
+  <!-- ☠️ GAME OVER -->
+
   <div id="gameOverScreen" style="display: none;">
     <div class="gameover-container">
       <h1 class="gameover-title">GAME OVER</h1>
-      <p class="gameover-stats">Fantasmas eliminados: <span id="finalKills">0</span></p>
-      <p class="gameover-stats">Tiempo sobrevivido: <span id="finalTime">0</span>s</p>
-      <p class="restart-hint">Presiona el botón secundario del joystick para reiniciar</p>
-    </div>
+
+```
+  <p class="gameover-stats">
+    Fantasmas eliminados: <span id="finalKills">0</span>
+  </p>
+
+  <p class="gameover-stats">
+    Tiempo sobrevivido: <span id="finalTime">0</span>s
+  </p>
+
+  <p class="restart-hint">
+    Presiona el botón secundario del joystick para reiniciar
+  </p>
+</div>
+```
 
   </div>
 
-  <!-- Canvas de Three.js -->
-  <canvas id="scene"></canvas>
+  <!-- 🎥 CANVAS -->
 
-  <!-- Audio de ambiente -->
-  <audio id="ambientAudio" src="assets/audio/terror_ambient.mp3" loop></audio>
+<canvas id="scene"></canvas>
 
-  <!-- Módulos -->
+  <!-- 🔊 AUDIO AMBIENTE -->
+
+<audio id="ambientAudio" src="assets/audio/terror_ambient.mp3" loop></audio>
+
+  <!-- 🧠 IMPORTMAP (THREE.JS) -->
+
   <script type="importmap">
-    {
-      "imports": {
-        "three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/"
-      }
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.167.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.0/examples/jsm/"
     }
+  }
   </script>
+
+  <!-- 🚀 SCRIPT PRINCIPAL -->
+
   <script type="module" src="main.js"></script>
+
 </body>
 </html>

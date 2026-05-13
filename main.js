@@ -4,7 +4,7 @@ import { XRControllerModelFactory } from 'three/addons/webxr/XRControllerModelFa
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
-
+let jumpscareModel = null;
 /** ========= CONFIGURACIÓN PRINCIPAL ========= */
 // MUNDO
 const WORLD_SIZE = 200;
@@ -12,14 +12,14 @@ const WORLD_RADIUS = WORLD_SIZE * 0.5 - 2;
 const FOG_DENSITY = 0.035;
 
 // JUGADOR
-const PLAYER_RADIUS = 0.4;
+const PLAYER_RADIUS = 0.5;
 const PLAYER_HEIGHT = 1.6;
 const MOVE_SPEED = 3;
 
 // FANTASMAS
-const GHOST_COUNT = 7.2; // Más fantasmas
+const GHOST_COUNT = 10; // Más fantasmas
 const GHOST_SPEED = 1.5; // Más lentos
-const GHOST_SPAWN_DISTANCE = 30;
+const GHOST_SPAWN_DISTANCE = 20;
 const GHOST_DAMAGE_DISTANCE = 1.2;
 const GHOST_SCALE = 0.012; // Escala del modelo FBX
 
@@ -347,19 +347,42 @@ gltfLoader.load('assets/models/angel_statue.glb', (gltf) => {
 const ghosts = [];
 const fbxLoader = new FBXLoader();
 
-fbxLoader.load('assets/models/ghost.fbx', (fbx) => {
+fbxLoader.load('assets/models/BoiledOne.fbx', (fbx) => {
+
+  const textureLoader = new THREE.TextureLoader();
+
+  const body = textureLoader.load('assets/textures/boiled/BoiledOne_Body_AlbedoTransparency.png');
+  const eyes = textureLoader.load('assets/textures/boiled/BoiledOne_Eyes_AlbedoTransparency.png');
+
   fbx.traverse(child => {
     if (child.isMesh) {
-      child.castShadow = true;
       child.material = new THREE.MeshStandardMaterial({
-        color: 0xcccccc,
-        transparent: true,
-        opacity: 0.7,
-        emissive: 0x666666,
-        emissiveIntensity: 0.5
+        map: body,
+        transparent: true
       });
     }
   });
+
+  fbx.scale.set(0.02, 0.02, 0.02);
+
+  jumpscareModel = fbx;
+});
+
+fbxLoader.load('assets/models/creepy+ghost+girl+3d+model.fbx', (fbx) => {
+  const textureLoader = new THREE.TextureLoader();
+const ghostTexture = textureLoader.load('assets/textures/creepy/tripo_image_2d99349c_0.png');
+
+  fbx.traverse(child => {
+     if (child.isMesh) {
+    child.material = new THREE.MeshStandardMaterial({
+      map: ghostTexture,
+      transparent: true,
+      opacity: 0.85
+    });
+    child.castShadow = true;
+  }
+  });
+
   
   console.log('Fantasmas cargados, generando', GHOST_COUNT);
   
@@ -368,6 +391,88 @@ fbxLoader.load('assets/models/ghost.fbx', (fbx) => {
     ghost.scale.x = GHOST_SCALE;
     ghost.scale.y = GHOST_SCALE;
     ghost.scale.z = GHOST_SCALE;
+    const shias = [];
+    fbxLoader.load('assets/models/shia lebeuofsf.fbx', (fbx) => {
+
+  const textureLoader = new THREE.TextureLoader();
+
+  const base = textureLoader.load('assets/textures/shia/Material.001_Base_Color.png');
+  const normal = textureLoader.load('assets/textures/shia/Material.001_Normal_OpenGL.png');
+  const roughness = textureLoader.load('assets/textures/shia/Material.001_Roughness.png');
+  const ao = textureLoader.load('assets/textures/shia/Material.001_Mixed_AO.png');
+
+  fbx.traverse(child => {
+    if (child.isMesh) {
+      child.material = new THREE.MeshStandardMaterial({
+        map: base,
+        normalMap: normal,
+        roughnessMap: roughness,
+        aoMap: ao
+      });
+      child.castShadow = true;
+    }
+  });
+
+  for (let i = 0; i < 2; i++) { // cantidad
+    const shia = fbx.clone();
+
+    shia.scale.set(0.01, 0.01, 0.01);
+
+    const angle = Math.random() * Math.PI * 2;
+    const x = player.position.x + Math.cos(angle) * 25;
+    const z = player.position.z + Math.sin(angle) * 25;
+
+    shia.position.set(x, 0, z);
+
+    shia.userData = {
+      active: true,
+      speed: GHOST_SPEED * 1.8 // MÁS RÁPIDO 🔥
+    };
+
+    scene.add(shia);
+    shias.push(shia);
+  }
+
+});
+function triggerJumpscare() {
+  if (gameOver) return;
+
+  gameOver = true;
+
+  const clone = jumpscareModel.clone();
+
+  clone.position.copy(player.position);
+  clone.position.z -= 1; // frente al jugador
+
+  scene.add(clone);
+
+  setTimeout(() => {
+    triggerGameOver();
+  }, 1500);
+}
+function updateShias(dt) {
+  for (const shia of shias) {
+    if (!shia.userData.active) continue;
+
+    const dx = player.position.x - shia.position.x;
+    const dz = player.position.z - shia.position.z;
+    const dist = Math.hypot(dx, dz);
+
+    if (dist > 0.5) {
+      const nx = dx / dist;
+      const nz = dz / dist;
+
+      shia.position.x += nx * shia.userData.speed * dt;
+      shia.position.z += nz * shia.userData.speed * dt;
+
+      shia.rotation.y = Math.atan2(dx, dz);
+    }
+
+    if (dist < GHOST_DAMAGE_DISTANCE) {
+      triggerJumpscare(); // 👈 aquí cambia
+    }
+  }
+}
     
     // Spawn detrás del jugador
     const angle = Math.random() * Math.PI * 2;
@@ -424,7 +529,7 @@ function updateGhosts(dt) {
     
     // Detectar colisión con jugador
     if (dist < GHOST_DAMAGE_DISTANCE) {
-      triggerGameOver();
+      triggerJumpscare();
     }
   }
 }
@@ -812,6 +917,7 @@ renderer.setAnimationLoop(() => {
   if (renderer.xr.isPresenting) {
     vrGamepadMove(dt);
     updateGhosts(dt);
+    updateShias(dt);
     updateLightOrbs(dt);
     updateParticles(dt); // Actualizar partículas
   }
